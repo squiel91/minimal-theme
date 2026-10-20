@@ -1,0 +1,14 @@
+{%- # Type-only hero: oversized headline, one line of text, one primary action. Args: eyebrow, title, text, primary_label, primary_url, secondary_label, secondary_url. -%}
+<section class="wrap hero">
+  {%- if eyebrow -%}<p class="eyebrow">{{ eyebrow }}</p>{%- endif -%}
+  <h1 class="display hero__title">{{ title }}</h1>
+  <div class="hero__foot">
+    {%- if text -%}<p class="hero__text">{{ text }}</p>{%- endif -%}
+    <div class="hero__actions">
+      {%- if primary_label -%}<a class="btn btn--primary btn--xl" href="{{ primary_url }}">{{ primary_label }}</a>{%- endif -%}
+      {%- if secondary_label -%}
+        <a class="arrow-link" href="{{ secondary_url }}"><span>{{ secondary_label }}</span>{% render 'lib/icons/arrow-right' %}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>

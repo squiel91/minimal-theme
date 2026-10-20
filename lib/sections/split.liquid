@@ -1,0 +1,14 @@
+{%- # Half image, half text. Args: eyebrow, title, text, link_label, link_url, image_url, image_alt, reverse. -%}
+<section class="wrap section">
+  <div class="split{% if reverse %} split--reverse{% endif %}">
+    <div class="split__media"><img src="{{ image_url }}" alt="{{ image_alt | escape }}" loading="lazy"></div>
+    <div class="split__body">
+      {%- if eyebrow -%}<p class="eyebrow">{{ eyebrow }}</p>{%- endif -%}
+      <h2 class="headline">{{ title }}</h2>
+      {%- if text -%}<p class="split__text">{{ text }}</p>{%- endif -%}
+      {%- if link_label -%}
+        <a class="arrow-link split__link" href="{{ link_url }}"><span>{{ link_label }}</span>{% render 'lib/icons/arrow-right' %}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>

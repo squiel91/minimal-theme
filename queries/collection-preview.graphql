@@ -1,0 +1,10 @@
+# A collection's name, URL and first products, for the homepage featured row.
+query CollectionPreview($handle: String!) {
+  collection(handle: $handle) {
+    name
+    url
+    products(first: 4) {
+      nodes { title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
+    }
+  }
+}

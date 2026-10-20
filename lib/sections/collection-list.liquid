@@ -1,0 +1,16 @@
+{%- # Collections as a large typographic list. Args: eyebrow, title, collections (array of { name url }). -%}
+{%- if collections.size > 0 -%}
+  <section class="wrap section" id="categorias">
+    {%- render 'lib/section-header', eyebrow: eyebrow, title: title -%}
+    <ul class="collection-list">
+      {%- for collection in collections -%}
+        <li>
+          <a class="collection-list__link" href="{{ collection.url }}">
+            <span class="title">{{ collection.name }}</span>
+            {%- render 'lib/icons/arrow-right', size: 28, stroke: 1.5 -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </section>
+{%- endif -%}

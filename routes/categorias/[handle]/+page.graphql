@@ -1,0 +1,18 @@
+query Collection($handle: String!, $page: Int = 1, $sort: ProductSort) {
+  collection(handle: $handle) @required {
+    name
+    description
+    url
+    productCount
+    parent { name url }
+    children { name url }
+    defaultSortBy
+    sortOptions { value label }
+    seo { title description }
+    coverImage { url }
+    products(first: 24, page: $page, sortBy: $sort) {
+      nodes { title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
+      pageInfo { currentPage hasNextPage hasPreviousPage }
+    }
+  }
+}

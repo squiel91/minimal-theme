@@ -1,0 +1,40 @@
+{%- # Latest blog posts. With feature_first, the newest post leads in a large format. Args: eyebrow, title, posts (array), link_label, link_url, feature_first. -%}
+{%- if posts.size > 0 -%}
+  {%- liquid
+    if feature_first
+      assign featured = posts.first
+      assign rest = posts | slice: 1, 3
+    else
+      assign rest = posts
+    endif
+  -%}
+  <section class="wrap section">
+    {%- render 'lib/section-header', eyebrow: eyebrow, title: title, link_label: link_label, link_url: link_url -%}
+    {%- if featured -%}
+      <a class="featured-post{% if rest.size > 0 %} featured-post--spaced{% endif %}{% if featured.coverImage == nil %} featured-post--plain{% endif %}" href="{{ featured.url }}">
+        {%- if featured.coverImage -%}
+          <div class="featured-post__media"><img src="{{ featured.coverImage | image_url: width: 1200 }}" alt="{{ featured.coverImage.alt | default: featured.title | escape }}" loading="lazy"></div>
+        {%- endif -%}
+        <div class="featured-post__body">
+          <p class="eyebrow">Último artículo · {% render 'lib/date', iso: featured.publishedAt %}</p>
+          <h3 class="headline featured-post__title">{{ featured.title }}</h3>
+          {%- if featured.excerpt -%}<p class="featured-post__excerpt">{{ featured.excerpt }}</p>{%- endif -%}
+          <span class="arrow-link"><span>Leer artículo</span>{% render 'lib/icons/arrow-right' %}</span>
+        </div>
+      </a>
+    {%- endif -%}
+    {%- if rest.size > 0 -%}
+      <div class="post-grid post-grid--{{ rest.size }}">
+        {%- for post in rest -%}
+          <a class="post-card" href="{{ post.url }}">
+            <div class="post-card__media">
+              {%- if post.coverImage -%}<img src="{{ post.coverImage | image_url: width: 800 }}" alt="{{ post.coverImage.alt | default: post.title | escape }}" loading="lazy">{%- endif -%}
+            </div>
+            <h3 class="post-card__title">{{ post.title }}</h3>
+            {%- if post.excerpt -%}<p class="post-card__excerpt">{{ post.excerpt }}</p>{%- endif -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </section>
+{%- endif -%}

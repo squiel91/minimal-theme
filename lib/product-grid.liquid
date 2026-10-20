@@ -1,0 +1,24 @@
+{%- # Product grid with "Cargar más" (auto-loads with JS) and page links. Args: products (connection), page_param_base (URL prefix ending in "page="), empty_text. -%}
+{%- if products.nodes.size > 0 -%}
+  <div class="product-grid" data-grid>
+    {%- for product in products.nodes -%}
+      {%- render 'lib/product-card', product: product -%}
+    {%- endfor -%}
+  </div>
+  {%- if products.pageInfo.hasNextPage or products.pageInfo.hasPreviousPage -%}
+    <nav class="pager" aria-label="Paginación" data-pager>
+      {%- if products.pageInfo.hasPreviousPage -%}
+        <a class="pager__link" href="{{ page_param_base }}{{ products.pageInfo.currentPage | minus: 1 }}">← Anterior</a>
+      {%- else -%}<span></span>{%- endif -%}
+      <span class="pager__current">Página {{ products.pageInfo.currentPage }}</span>
+      {%- if products.pageInfo.hasNextPage -%}
+        <a class="pager__link" href="{{ page_param_base }}{{ products.pageInfo.currentPage | plus: 1 }}" data-load-more>Siguiente →</a>
+      {%- else -%}<span></span>{%- endif -%}
+    </nav>
+  {%- endif -%}
+{%- else -%}
+  <div class="empty-state">
+    <p class="title">{{ empty_text | default: 'Todavía no hay productos acá.' }}</p>
+    <a class="arrow-link" href="/productos"><span>Ver todos los productos</span>{% render 'lib/icons/arrow-right' %}</a>
+  </div>
+{%- endif -%}

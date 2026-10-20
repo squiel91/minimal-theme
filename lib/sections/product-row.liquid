@@ -1,0 +1,11 @@
+{%- # A titled row of up to 4 product cards. Args: eyebrow, title, products (array), link_label, link_url. -%}
+{%- if products.size > 0 -%}
+  <section class="wrap section">
+    {%- render 'lib/section-header', eyebrow: eyebrow, title: title, link_label: link_label, link_url: link_url -%}
+    <div class="product-grid product-grid--row">
+      {%- for product in products limit: 4 -%}
+        {%- render 'lib/product-card', product: product -%}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}

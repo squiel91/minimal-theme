@@ -1,0 +1,17 @@
+{%- # Store promises for the homepage (layout: 'columns') and the product page (layout: 'list'). Edit the copy here. -%}
+{%- # Args: layout, shipping_url, returns_url (policy page URLs; no link without one). -%}
+{%- if layout == 'list' -%}
+  <ul class="benefits-list">
+    {%- render 'lib/benefit', layout: layout, title: 'Envíos a todo el país', href: shipping_url -%}
+    {%- render 'lib/benefit', layout: layout, title: 'Cambios sin vueltas', href: returns_url -%}
+    {%- render 'lib/benefit', layout: layout, title: 'Pagá como quieras' -%}
+  </ul>
+{%- else -%}
+  <section class="wrap section">
+    <ul class="benefits">
+      {%- render 'lib/benefit', layout: layout, index: '01', title: 'Envíos a todo el país', text: 'Recibí tu pedido en 24 a 72 horas hábiles.', href: shipping_url -%}
+      {%- render 'lib/benefit', layout: layout, index: '02', title: 'Cambios sin vueltas', text: 'Tenés 30 días para cambiar o devolver tu compra.', href: returns_url -%}
+      {%- render 'lib/benefit', layout: layout, index: '03', title: 'Pagá como quieras', text: 'Tarjetas, transferencia o Mercado Pago.' -%}
+    </ul>
+  </section>
+{%- endif -%}

@@ -1,0 +1,37 @@
+{% metadata title: 'Blog' %}
+
+<div class="wrap page">
+  <header class="page-header">
+    <p class="eyebrow">Diario</p>
+    <h1 class="display">Ideas para la casa</h1>
+  </header>
+
+  {%- if data.posts.nodes.size == 0 -%}
+    <p class="empty-state title">Todavía no hay artículos.</p>
+  {%- else -%}
+    <ul class="post-list">
+      {%- for post in data.posts.nodes -%}
+        <li>
+          <a class="post-row" href="{{ post.url }}">
+            <p class="post-row__date">{% render 'lib/date', iso: post.publishedAt %}</p>
+            <div class="post-row__body">
+              <h2 class="title post-row__title">{{ post.title }}</h2>
+              {%- if post.excerpt -%}<p class="post-row__excerpt">{{ post.excerpt }}</p>{%- endif -%}
+              <span class="arrow-link"><span>Leer artículo</span>{% render 'lib/icons/arrow-right' %}</span>
+            </div>
+            {%- if post.coverImage -%}
+              <div class="post-row__media"><img src="{{ post.coverImage | image_url: width: 800 }}" alt="{{ post.coverImage.alt | default: post.title | escape }}" loading="lazy"></div>
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    {%- if data.posts.pageInfo.totalPages > 1 -%}
+      <nav class="pager pager--static" aria-label="Paginación">
+        {%- if data.posts.pageInfo.hasPreviousPage -%}<a class="pager__link" href="?page={{ data.posts.pageInfo.currentPage | minus: 1 }}">← Anterior</a>{%- else -%}<span></span>{%- endif -%}
+        <span class="pager__current">Página {{ data.posts.pageInfo.currentPage }} de {{ data.posts.pageInfo.totalPages }}</span>
+        {%- if data.posts.pageInfo.hasNextPage -%}<a class="pager__link" href="?page={{ data.posts.pageInfo.currentPage | plus: 1 }}">Siguiente →</a>{%- else -%}<span></span>{%- endif -%}
+      </nav>
+    {%- endif -%}
+  {%- endif -%}
+</div>

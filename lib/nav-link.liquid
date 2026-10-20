@@ -1,0 +1,17 @@
+{%- # Menu link that marks the current section. Args: item (MenuItem), class. -%}
+{%- liquid
+  assign current = false
+  if item.url == '/'
+    if request.path == '/'
+      assign current = true
+    endif
+  else
+    assign prefix = item.url | append: '/'
+    if request.path == item.url
+      assign current = true
+    elsif request.path contains prefix
+      assign current = true
+    endif
+  endif
+-%}
+<a class="{{ class }}{% if current %} is-current{% endif %}" href="{{ item.url }}"{% if current %} aria-current="page"{% endif %}{% if item.openInNewTab %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>

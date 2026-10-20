@@ -1,0 +1,41 @@
+{%- # Product gallery: scroll-snap slides with arrows and thumbnails. Product images first, then variant images not already shown. Args: product. -%}
+{%- liquid
+  assign variant_images = product.variants | map: 'image' | compact
+  assign all_images = product.images | concat: variant_images
+  assign unique_count = all_images | map: 'url' | uniq | size
+-%}
+<div class="gallery" data-gallery>
+  <div class="gallery__track" data-gallery-track tabindex="0" role="region" aria-roledescription="carrusel" aria-label="Imágenes del producto">
+    {%- if unique_count == 0 -%}
+      <div class="gallery__slide"><img src="{{ 'placeholder.svg' | asset_url }}" alt="{{ product.title | escape }}"></div>
+    {%- endif -%}
+    {%- assign seen = '' -%}
+    {%- for image in all_images -%}
+      {%- assign key = '[' | append: image.url | append: ']' -%}
+      {%- if seen contains key -%}{%- continue -%}{%- endif -%}
+      {%- assign seen = seen | append: key -%}
+      <div class="gallery__slide" data-image-url="{{ image.url }}">
+        <img src="{{ image | image_url: width: 1200 }}" alt="{{ image.alt | default: product.title | escape }}"{% unless forloop.first %} loading="lazy"{% endunless %} draggable="false">
+      </div>
+    {%- endfor -%}
+  </div>
+  {%- if unique_count > 1 -%}
+    <button class="gallery__arrow gallery__arrow--prev" type="button" data-gallery-prev aria-label="Imagen anterior">{% render 'lib/icons/chevron-left' %}</button>
+    <button class="gallery__arrow gallery__arrow--next" type="button" data-gallery-next aria-label="Imagen siguiente">{% render 'lib/icons/chevron-right' %}</button>
+  {%- endif -%}
+</div>
+{%- if unique_count > 1 -%}
+  <div class="gallery__thumbs">
+    {%- assign seen = '' -%}
+    {%- assign index = 0 -%}
+    {%- for image in all_images -%}
+      {%- assign key = '[' | append: image.url | append: ']' -%}
+      {%- if seen contains key -%}{%- continue -%}{%- endif -%}
+      {%- assign seen = seen | append: key -%}
+      <button class="gallery__thumb{% if index == 0 %} is-current{% endif %}" type="button" data-gallery-thumb="{{ index }}" aria-label="Ver imagen {{ index | plus: 1 }}"{% if index == 0 %} aria-current="true"{% endif %}>
+        <img src="{{ image | image_url: width: 400 }}" alt="" loading="lazy">
+      </button>
+      {%- assign index = index | plus: 1 -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

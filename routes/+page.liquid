@@ -1,0 +1,64 @@
+{%- # Homepage: an ordered list of sections. Each line holds that section's copy; reorder, remove or repeat lines freely. -%}
+{%- # To feature a collection instead of best sellers, set its handle (ideally one with 4+ products). -%}
+{%- assign featured_handle = '' -%}
+
+{%- assign featured_title = 'Más vendidos' -%}
+{%- assign featured_url = '/productos' -%}
+{%- assign featured_products = data.bestSellers.nodes -%}
+{%- if featured_handle != '' -%}
+  {%- query 'collection-preview', handle: featured_handle, as: 'preview' -%}
+  {%- if preview.collection and preview.collection.products.nodes.size > 0 -%}
+    {%- assign featured_title = preview.collection.name -%}
+    {%- assign featured_url = preview.collection.url -%}
+    {%- assign featured_products = preview.collection.products.nodes -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- render 'lib/sections/hero',
+  eyebrow: 'Objetos para la casa',
+  title: 'Menos cosas, mejor elegidas.',
+  text: 'Piezas simples y duraderas para cada ambiente. Elegidas una por una, pensadas para usarse todos los días.',
+  primary_label: 'Ver productos',
+  primary_url: '/productos',
+  secondary_label: 'Explorar categorías',
+  secondary_url: '#categorias'
+-%}
+
+{%- render 'lib/sections/product-row',
+  eyebrow: 'Selección',
+  title: featured_title,
+  products: featured_products,
+  link_label: 'Ver todo',
+  link_url: featured_url
+-%}
+
+{%- render 'lib/sections/split',
+  eyebrow: 'Cómo elegimos',
+  title: 'Hechos para durar, no para una temporada.',
+  text: 'Trabajamos con talleres chicos y materiales nobles: cerámica, lino y madera maciza. Si no lo usaríamos en nuestra casa, no lo vendemos.',
+  link_label: 'Ver la colección',
+  link_url: '/productos',
+  image_url: 'https://imagedelivery.net/HiGIiqXkjW_RLEpaG3HXUg/3dcd0c43-db00-4f51-7c6f-77e2ca56ba00/lg',
+  image_alt: 'Jarrón de gres con una rama seca y un cuenco oscuro sobre una mesa de roble'
+-%}
+
+{%- render 'lib/sections/collection-list',
+  eyebrow: 'Categorías',
+  title: 'Explorá por ambiente',
+  collections: data.rootCollections.nodes
+-%}
+
+{%- render 'lib/sections/benefits',
+  layout: 'columns',
+  shipping_url: data.shippingPolicy.url,
+  returns_url: data.returnsPolicy.url
+-%}
+
+{%- render 'lib/sections/blog-preview',
+  eyebrow: 'Diario',
+  title: 'Ideas para la casa',
+  posts: data.latestPosts.nodes,
+  link_label: 'Ver todos',
+  link_url: '/blog',
+  feature_first: true
+-%}

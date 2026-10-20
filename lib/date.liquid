@@ -1,0 +1,10 @@
+{%- # Long Spanish date: "15 de octubre de 2025". Args: iso. -%}
+{%- if iso -%}
+  {%- liquid
+    assign months = 'enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre' | split: ','
+    assign month_index = iso | date: '%m' | minus: 1
+    assign day = iso | date: '%d' | plus: 0
+    assign year = iso | date: '%Y'
+  -%}
+  <time datetime="{{ iso }}">{{ day }} de {{ months[month_index] }} de {{ year }}</time>
+{%- endif -%}

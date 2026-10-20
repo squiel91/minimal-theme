@@ -1,0 +1,7 @@
+query Page($handle: String!) {
+  page(handle: $handle) @required {
+    title
+    html
+    seo { title description }
+  }
+}

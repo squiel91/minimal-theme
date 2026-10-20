@@ -1,0 +1,28 @@
+{%- liquid
+  assign post = data.post
+  assign title = post.seo.title | default: post.title
+  assign description = post.seo.description | default: post.excerpt
+  assign more = data.morePosts.nodes | where_exp: 'p', 'p.handle != post.handle' | slice: 0, 3
+-%}
+{% metadata title: title, description: description, image: post.coverImage.url %}
+
+<article class="wrap page">
+  {%- render 'lib/breadcrumbs', parent_label: 'Blog', parent_url: '/blog', current: post.title -%}
+
+  <header class="article__header">
+    {%- if post.publishedAt -%}<p class="eyebrow">{% render 'lib/date', iso: post.publishedAt %}</p>{%- endif -%}
+    <h1 class="headline">{{ post.title }}</h1>
+    {%- if post.excerpt -%}<p class="article__lead">{{ post.excerpt }}</p>{%- endif -%}
+  </header>
+
+  {%- if post.coverImage -%}
+    <img class="article__cover" src="{{ post.coverImage | image_url: width: 1200 }}" alt="{{ post.coverImage.alt | default: post.title | escape }}">
+  {%- endif -%}
+
+  <div class="article__body">
+    <div class="rich-text">{{ post.html }}</div>
+    <p class="article__back"><a href="/blog">← Volver al blog</a></p>
+  </div>
+</article>
+
+{%- render 'lib/sections/blog-preview', eyebrow: 'Seguí leyendo', title: 'Más artículos', posts: more -%}

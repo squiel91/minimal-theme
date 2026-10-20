@@ -1,0 +1,6 @@
+query Search($q: String = "", $page: Int = 1) {
+  results: products(query: $q, first: 24, page: $page) {
+    nodes { title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
+    pageInfo { currentPage hasNextPage hasPreviousPage }
+  }
+}

@@ -1,0 +1,41 @@
+{%- liquid
+  assign collection = data.collection
+  assign title = collection.seo.title | default: collection.name
+  assign sort = request.query.sort | default: collection.defaultSortBy
+  assign page_base = '?sort=' | append: sort | append: '&page='
+-%}
+{% metadata title: title, description: collection.seo.description, image: collection.coverImage.url %}
+
+<div class="wrap page">
+  {%- render 'lib/breadcrumbs', parent_label: collection.parent.name, parent_url: collection.parent.url, current: collection.name -%}
+
+  <header class="page-header">
+    <h1 class="display">{{ collection.name }}</h1>
+    {%- if collection.description -%}<p class="page-header__text">{{ collection.description }}</p>{%- endif -%}
+  </header>
+
+  {%- if collection.children.size > 0 -%}
+    <nav class="chips" aria-label="Subcategorías">
+      <span class="chip is-current" aria-current="page">Todo</span>
+      {%- for child in collection.children -%}<a class="chip" href="{{ child.url }}">{{ child.name }}</a>{%- endfor -%}
+    </nav>
+  {%- endif -%}
+
+  <div class="toolbar">
+    <p class="muted small">{{ collection.productCount }} {% if collection.productCount == 1 %}producto{% else %}productos{% endif %}</p>
+    <form class="sort" method="get">
+      <label class="muted" for="sort">Ordenar por</label>
+      <span class="sort__control">
+        <select id="sort" name="sort" data-autosubmit>
+          {%- for option in collection.sortOptions -%}
+            <option value="{{ option.value }}"{% if option.value == sort %} selected{% endif %}>{{ option.label }}</option>
+          {%- endfor -%}
+        </select>
+        {%- render 'lib/icons/chevron-down' -%}
+      </span>
+      <noscript><button class="sort__apply" type="submit">Aplicar</button></noscript>
+    </form>
+  </div>
+
+  {%- render 'lib/product-grid', products: collection.products, page_param_base: page_base, empty_text: 'Todavía no hay productos en esta categoría.' -%}
+</div>

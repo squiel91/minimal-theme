@@ -1,0 +1,9 @@
+{% metadata title: 'Productos' %}
+
+<div class="wrap page">
+  <header class="page-header">
+    <h1 class="display">Productos</h1>
+  </header>
+  <div class="toolbar toolbar--rule"></div>
+  {%- render 'lib/product-grid', products: data.allProducts, page_param_base: '?page=' -%}
+</div>

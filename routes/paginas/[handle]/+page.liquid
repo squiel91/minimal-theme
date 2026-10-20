@@ -1,0 +1,23 @@
+{%- liquid
+  assign page = data.page
+  assign title = page.seo.title | default: page.title
+  # Merchant pages often open by repeating their title as a heading; drop it.
+  assign html = page.html
+  assign trimmed = html | strip
+  for tag in (1..2)
+    assign heading = '<h' | append: tag | append: '>' | append: page.title | append: '</h' | append: tag | append: '>'
+    assign start = trimmed | slice: 0, heading.size
+    if start == heading
+      assign html = trimmed | remove_first: heading
+    endif
+  endfor
+-%}
+{% metadata title: title, description: page.seo.description %}
+
+<div class="wrap page">
+  {%- render 'lib/breadcrumbs', current: page.title -%}
+  <div class="static-page">
+    <h1 class="headline static-page__title">{{ page.title }}</h1>
+    <div class="rich-text static-page__body">{{ html }}</div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+query Post($handle: String!) {
+  post: blogPost(handle: $handle) @required {
+    handle
+    title
+    excerpt
+    publishedAt
+    coverImage { url alt }
+    html
+    seo { title description }
+  }
+  morePosts: blogPosts(first: 4) { nodes { handle title url excerpt publishedAt coverImage { url alt } } }
+}

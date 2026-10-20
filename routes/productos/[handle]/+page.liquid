@@ -1,0 +1,156 @@
+{%- liquid
+  assign product = data.product
+  assign title = product.seo.title | default: product.title
+  assign description = product.seo.description | default: product.description
+-%}
+{% metadata title: title, description: description, image: product.coverImage.url %}
+
+{%- # schema.org Product for search engines. Placeholder and relative images are left out. -%}
+{%- capture json_ld -%}
+{"@context":"https://schema.org","@type":"Product","name":{{ product.title | json }}
+{%- if product.description %},"description":{{ product.description | json }}{% endif -%}
+{%- assign image_urls = product.images | map: 'url' -%}
+{%- if image_urls.size > 0 %},"image":{{ image_urls | json }}{% endif -%}
+{%- if product.rating and product.reviewsCount > 0 %},"aggregateRating":{"@type":"AggregateRating","ratingValue":{{ product.rating }},"reviewCount":{{ product.reviewsCount }}}{% endif -%}
+{%- if product.reviews.nodes.size > 0 %},"review":[
+  {%- for review in product.reviews.nodes -%}
+    {"@type":"Review","author":{"@type":"Person","name":{{ review.authorName | json }}},"reviewRating":{"@type":"Rating","ratingValue":{{ review.rating }},"bestRating":5},"reviewBody":{{ review.content | json }}}{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+]{% endif -%}
+,"offers":[
+  {%- assign first_offer = true -%}
+  {%- for variant in product.variants -%}
+    {%- if variant.priceInCents -%}
+      {%- unless first_offer %},{% endunless -%}
+      {"@type":"Offer","price":{{ variant.priceInCents | divided_by: 100.0 }},"priceCurrency":{{ product.currency | json }},"availability":"https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}"{% if variant.sku %},"sku":{{ variant.sku | json }}{% endif %}}
+      {%- assign first_offer = false -%}
+    {%- endif -%}
+  {%- endfor -%}
+]}
+{%- endcapture -%}
+{% head %}
+<script type="application/ld+json">{{ json_ld | replace: '</', '<\/' }}</script>
+{% endhead %}
+
+<div class="wrap product">
+  {%- render 'lib/breadcrumbs', parent_label: 'Productos', parent_url: '/productos', current: product.title -%}
+
+  <div class="product__grid" data-product-page>
+    <div class="product__media">
+      {%- render './_snippets/gallery', product: product -%}
+    </div>
+
+    <div class="product__info">
+      <h1 class="title product__title">{{ product.title }}</h1>
+
+      <div class="product__price-row">
+        <p class="product__price">
+          <span data-price>{% render 'lib/price', product: product %}</span>
+          <s class="product__compare" data-compare-at{% unless product.compareAtPriceInCents %} hidden{% endunless %}>
+            {%- if product.compareAtPriceInCents -%}{{ product.compareAtPriceInCents | money_without_trailing_zeros: product.currency }}{%- endif -%}
+          </s>
+        </p>
+        {%- if product.reviews.nodes.size > 0 -%}
+          <a class="product__rating" href="#resenas">{% render 'lib/rating', rating: product.rating, count: product.reviewsCount %}</a>
+        {%- endif -%}
+      </div>
+
+      <div class="product__buy">
+        {%- for option in product.options -%}
+          {%- if option.displayType == 'dropdown' or option.displayType == 'select' -%}
+            <div class="option">
+              <label class="option__label" for="option-{{ forloop.index }}"><span class="muted">{{ option.name }}:</span> <span data-option-selected="{{ option.name | escape }}"></span></label>
+              <span class="select">
+                <select id="option-{{ forloop.index }}" data-option-select="{{ option.name | escape }}">
+                  <option value="">Seleccioná uno</option>
+                  {%- for value in option.values -%}<option value="{{ value.value | escape }}">{{ value.value }}</option>{%- endfor -%}
+                </select>
+                {%- render 'lib/icons/chevron-down' -%}
+              </span>
+            </div>
+          {%- else -%}
+            <fieldset class="option">
+              <legend class="option__label"><span class="muted">{{ option.name }}:</span> <span data-option-selected="{{ option.name | escape }}"></span></legend>
+              <div class="option__chips">
+                {%- for value in option.values -%}
+                  <button class="option-chip" type="button" data-option-name="{{ option.name | escape }}" data-option-value="{{ value.value | escape }}" aria-pressed="false">
+                    {%- if value.image -%}
+                      <img class="option-chip__swatch" src="{{ value.image | image_url: width: 400 }}" alt="">
+                    {%- elsif value.color -%}
+                      <span class="option-chip__swatch" style="background-color: {{ value.color }}" aria-hidden="true"></span>
+                    {%- endif -%}
+                    <span class="option-chip__label">{{ value.value }}</span>
+                  </button>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <div>
+          <p class="stock" data-stock>
+            <span class="stock__dot" aria-hidden="true"></span>
+            <span data-stock-text>
+              {%- if product.variants.size == 1 -%}
+                {%- assign only = product.variants.first -%}
+                {%- if only.stock == nil -%}En stock{%- elsif only.stock <= 0 -%}Temporalmente agotado{%- else -%}{{ only.stock }} en stock{%- endif -%}
+              {%- else -%}
+                Seleccioná las opciones para ver el stock.
+              {%- endif -%}
+            </span>
+          </p>
+          <div class="product__actions">
+            <div class="qty">
+              <button type="button" data-qty-minus aria-label="Restar uno" disabled>−</button>
+              <input type="number" min="1" value="1" data-qty aria-label="Cantidad">
+              <button type="button" data-qty-plus aria-label="Sumar uno">+</button>
+            </div>
+            <button class="btn btn--primary btn--xl btn--full" type="button" data-add-to-cart>Agregar al carrito</button>
+          </div>
+          <button class="share" type="button" data-share>{% render 'lib/icons/share' %}<span>Compartir</span></button>
+          <p class="product__status small" role="status" data-product-status hidden></p>
+        </div>
+
+        {%- render 'lib/sections/benefits', layout: 'list', shipping_url: data.shippingPolicy.url, returns_url: data.returnsPolicy.url -%}
+      </div>
+
+      {%- if product.description or product.specifications.size > 0 -%}
+        <div class="details">
+          {%- if product.description -%}
+            <details class="details__item" open>
+              <summary>Descripción<span aria-hidden="true">+</span></summary>
+              <p class="details__text">{{ product.description | newline_to_br }}</p>
+            </details>
+          {%- endif -%}
+          {%- if product.specifications.size > 0 -%}
+            <details class="details__item">
+              <summary>Especificaciones<span aria-hidden="true">+</span></summary>
+              <dl class="specs">
+                {%- for spec in product.specifications -%}
+                  <div><dt>{{ spec.name }}</dt><dd>{{ spec.value }}</dd></div>
+                {%- endfor -%}
+              </dl>
+            </details>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<dialog class="dialog" data-cart-error aria-label="No se pudo agregar al carrito">
+  <h2 class="dialog__title">No se pudo agregar al carrito</h2>
+  <p data-cart-error-message></p>
+  <p class="muted small">Para agregarlo: elegí todas las opciones del producto, ajustá la cantidad y tocá “Agregar al carrito” de nuevo.</p>
+  <form method="dialog"><button class="btn btn--primary btn--lg">Entendido</button></form>
+</dialog>
+
+{%- # Variant data for assets/theme.js (selection, price, stock, gallery, cart). -%}
+{%- capture product_json -%}
+{"id":{{ product.id | json }},"title":{{ product.title | json }},"currency":{{ product.currency | json }},"priceMinInCents":{{ product.priceMinInCents | json }},"optionNames":{{ product.options | map: 'name' | json }},"variants":{{ product.variants | json }}}
+{%- endcapture -%}
+<script type="application/json" data-product-json>{{ product_json | replace: '</', '<\/' }}</script>
+
+{%- render './_snippets/reviews', product: product -%}
+
+{%- render 'lib/sections/product-row', eyebrow: 'Relacionados', title: 'También te puede gustar', products: product.related -%}

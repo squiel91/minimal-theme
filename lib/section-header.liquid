@@ -1,0 +1,10 @@
+{%- # Section heading: eyebrow + headline on the left, optional link on the right. Args: eyebrow, title, link_label, link_url, id. -%}
+<div class="section-header">
+  <div>
+    {%- if eyebrow -%}<p class="eyebrow">{{ eyebrow }}</p>{%- endif -%}
+    <h2 class="headline"{% if id %} id="{{ id }}"{% endif %}>{{ title }}</h2>
+  </div>
+  {%- if link_label and link_url -%}
+    <a class="arrow-link section-header__link" href="{{ link_url }}"><span>{{ link_label }}</span>{% render 'lib/icons/arrow-right' %}</a>
+  {%- endif -%}
+</div>

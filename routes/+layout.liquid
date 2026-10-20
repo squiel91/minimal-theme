@@ -1,0 +1,145 @@
+{%- # Root layout: document, store theming, header, newsletter band, footer and WhatsApp button. -%}
+{%- liquid
+  assign p = data.store.personalization
+  assign primary = p.primaryColor | default: '#262626'
+  assign on_primary = p.primaryButtonTextColor | default: '#ffffff'
+  case p.rounding
+    when 'none'
+      assign radius_controls = '0'
+      assign radius_panels = '0'
+    when 'sm'
+      assign radius_controls = '0.375rem'
+      assign radius_panels = '0.5rem'
+    when 'lg'
+      assign radius_controls = '1.25rem'
+      assign radius_panels = '1.5rem'
+    else
+      assign radius_controls = '0.75rem'
+      assign radius_panels = '1rem'
+  endcase
+  assign font_family = 'ui-sans-serif, system-ui, sans-serif'
+  if p.font
+    assign font_family = '"' | append: p.font.family | append: '", ' | append: p.font.fallbackFamilies
+  endif
+  assign whatsapp_digits = data.store.whatsappNumber | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
+-%}
+<!doctype html>
+<html lang="es" style="--primary: {{ primary }}; --on-primary: {{ on_primary }}; --radius-controls: {{ radius_controls }}; --radius-panels: {{ radius_panels }}; --font-family: {{ font_family | escape }};">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {{ tiendu_head }}
+  {%- if p.font -%}
+    <style>
+      {%- for v in p.font.variants -%}
+        {%- if v.url -%}
+          @font-face{font-family:"{{ p.font.family }}";font-style:{{ v.style }};font-weight:{{ v.weight }};font-display:swap;src:url("{{ v.url }}"){% if v.format %} format("{{ v.format }}"){% endif %};}
+        {%- endif -%}
+      {%- endfor -%}
+    </style>
+  {%- endif -%}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  {{ 'tiendu-sdk.js' | asset_url | script_tag }}
+  {{ 'theme.js' | asset_url | script_tag }}
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="wrap site-header__bar">
+      {%- if data.mainMenu -%}
+        <button class="site-header__menu-button" type="button" data-menu-open aria-haspopup="dialog">Menú</button>
+      {%- endif -%}
+      <a class="site-header__name" href="/">{{ data.store.name }}</a>
+      {%- if data.mainMenu -%}
+        <nav class="site-header__nav" aria-label="Principal">
+          {%- for item in data.mainMenu.items -%}
+            {%- render 'lib/nav-link', item: item, class: 'site-header__link' -%}
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+      <div class="site-header__actions">
+        <a class="icon-button" href="/busqueda" data-open-search aria-label="Buscar">{% render 'lib/icons/search' %}</a>
+        <button class="icon-button icon-button--cart" type="button" data-open-checkout aria-label="Carrito">
+          {% render 'lib/icons/cart' %}
+          <span class="icon-button__label">Carrito</span>
+          <span class="cart-count" data-cart-count hidden></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  {%- if data.mainMenu -%}
+    <dialog class="mobile-menu" data-menu aria-label="Menú">
+      <div class="mobile-menu__head">
+        <span class="eyebrow">Menú</span>
+        <button class="mobile-menu__close" type="button" data-menu-close>Cerrar</button>
+      </div>
+      <nav aria-label="Principal">
+        <ul class="mobile-menu__list">
+          {%- for item in data.mainMenu.items -%}
+            <li>{%- render 'lib/nav-link', item: item, class: 'mobile-menu__link' -%}</li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    </dialog>
+  {%- endif -%}
+
+  <main id="contenido">{{ content }}</main>
+
+  {%- render 'lib/sections/newsletter',
+    title: 'Novedades, sin ruido.',
+    text: 'Un correo por mes con piezas nuevas y reposiciones. Nada más.',
+    success: '¡Gracias por suscribirte! Revisá tu correo.',
+    privacy_url: data.privacyPolicy.url
+  -%}
+
+  <footer class="wrap site-footer">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a class="title" href="/">{{ data.store.name }}</a>
+        {%- if data.store.emailAddress or data.store.whatsappNumber -%}
+          <ul class="site-footer__contact">
+            {%- if data.store.emailAddress -%}
+              <li><a href="mailto:{{ data.store.emailAddress }}">{{ data.store.emailAddress }}</a></li>
+            {%- endif -%}
+            {%- if data.store.whatsappNumber -%}
+              <li><a href="https://wa.me/{{ whatsapp_digits }}" target="_blank" rel="noopener">WhatsApp {{ data.store.whatsappNumber }}</a></li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
+      </div>
+      {%- if data.footerCollections.nodes.size > 0 -%}
+        <nav aria-label="Colecciones">
+          <h2 class="eyebrow site-footer__heading">Colecciones</h2>
+          <ul class="site-footer__links">
+            {%- for c in data.footerCollections.nodes -%}
+              <li><a href="{{ c.url }}">{{ c.name }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+      {%- if data.infoMenu -%}
+        <nav aria-label="{{ data.infoMenu.title }}">
+          <h2 class="eyebrow site-footer__heading">{{ data.infoMenu.title }}</h2>
+          <ul class="site-footer__links">
+            {%- for item in data.infoMenu.items -%}
+              <li><a href="{{ item.url }}"{% if item.openInNewTab %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    </div>
+    <p class="site-footer__legal">© {{ 'now' | date: '%Y' }} {{ data.store.name }}. Todos los derechos reservados.</p>
+  </footer>
+
+  {%- if data.store.whatsappNumber -%}
+    {%- assign whatsapp_message = 'Hola, tengo una consulta.' | url_encode -%}
+    <a class="whatsapp-button" href="https://wa.me/{{ whatsapp_digits }}?text={{ whatsapp_message }}" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp" title="Escribinos por WhatsApp">
+      {%- render 'lib/icons/whatsapp' -%}
+    </a>
+  {%- endif -%}
+
+  {{ tiendu_body_end }}
+</body>
+</html>

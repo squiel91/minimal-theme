@@ -1,0 +1,11 @@
+{%- # Product price in cents: "Desde" for ranges, "A consultar" without a price. Args: product. -%}
+{%- liquid
+  if product.priceMinInCents == nil
+    echo 'A consultar'
+  else
+    if product.priceMaxInCents and product.priceMaxInCents > product.priceMinInCents
+      echo 'Desde '
+    endif
+    echo product.priceMinInCents | money_without_trailing_zeros: product.currency
+  endif
+-%}

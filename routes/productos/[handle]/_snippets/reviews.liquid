@@ -1,0 +1,35 @@
+{%- # Reviews: large average on the left, review list on the right. Args: product. -%}
+{%- if product.reviews.nodes.size > 0 -%}
+  <section class="wrap reviews" id="resenas">
+    <div class="reviews__grid">
+      <div class="reviews__summary">
+        <p class="eyebrow">Reseñas</p>
+        {%- if product.rating -%}
+          {%- assign average = product.rating | round: 1 | append: '' | replace: '.', ',' -%}
+          <p class="display">{{ average }}</p>
+        {%- endif -%}
+        {%- render 'lib/rating', rating: product.rating, count: product.reviewsCount, show_count: false, size: 18 -%}
+        <p class="muted small">{{ product.reviewsCount }} {% if product.reviewsCount == 1 %}reseña{% else %}reseñas{% endif %}</p>
+      </div>
+      <ul class="reviews__list">
+        {%- for review in product.reviews.nodes -%}
+          <li class="review">
+            {%- render 'lib/rating', rating: review.rating, count: 1, show_count: false -%}
+            <p class="review__content">{{ review.content | newline_to_br }}</p>
+            {%- if review.images.size > 0 -%}
+              <div class="review__images">
+                {%- for image in review.images -%}
+                  <img src="{{ image | image_url: width: 400 }}" alt="{{ image.alt | default: 'Imagen de la reseña' | escape }}" loading="lazy">
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+            <p class="review__meta">
+              <span class="review__author">{{ review.authorName }}</span>
+              {%- if review.verifiedPurchase -%}<span> · Compra verificada</span>{%- endif -%}
+            </p>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </section>
+{%- endif -%}

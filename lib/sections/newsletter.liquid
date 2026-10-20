@@ -1,0 +1,19 @@
+{%- # Full-width band in the store's color with the newsletter signup (submitted by assets/theme.js). Args: title, text, success, privacy_url. -%}
+<section class="newsletter">
+  <div class="wrap newsletter__inner">
+    <div>
+      <h2 class="headline">{{ title }}</h2>
+      {%- if text -%}<p class="newsletter__text">{{ text }}</p>{%- endif -%}
+    </div>
+    <form class="newsletter__form" data-newsletter data-success="{{ success | escape }}">
+      <div class="newsletter__field">
+        <input type="email" name="email" required placeholder="tu@correo.com" aria-label="Correo electrónico">
+        <button type="submit">Suscribirme</button>
+      </div>
+      <p class="newsletter__status" role="status" data-newsletter-status hidden></p>
+      {%- if privacy_url -%}
+        <p class="newsletter__note">Al suscribirte aceptás nuestra <a href="{{ privacy_url }}">política de privacidad</a>.</p>
+      {%- endif -%}
+    </form>
+  </div>
+</section>

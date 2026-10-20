@@ -1,0 +1,24 @@
+{%- assign q = request.query.q | strip -%}
+{%- if q != blank -%}
+  {%- assign title = 'Resultados para “' | append: q | append: '”' -%}
+{%- else -%}
+  {%- assign title = 'Buscar' -%}
+{%- endif -%}
+{% metadata title: title, robots: 'noindex' %}
+
+<div class="wrap page">
+  <form class="search-form" method="get" action="/busqueda" role="search">
+    <label class="eyebrow" for="q">Buscar</label>
+    <div class="search-form__field">
+      <input id="q" type="search" name="q" value="{{ q | escape }}" placeholder="¿Qué estás buscando?">
+      <button type="submit" aria-label="Buscar">{% render 'lib/icons/search' %}</button>
+    </div>
+  </form>
+
+  {%- if q != blank -%}
+    {%- assign q_encoded = q | url_encode -%}
+    {%- assign page_base = '?q=' | append: q_encoded | append: '&page=' -%}
+    <p class="toolbar toolbar--rule muted small">Resultados para “{{ q }}”</p>
+    {%- render 'lib/product-grid', products: data.results, page_param_base: page_base, empty_text: 'No encontramos productos con esa búsqueda.' -%}
+  {%- endif -%}
+</div>

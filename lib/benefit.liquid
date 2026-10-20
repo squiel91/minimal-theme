@@ -1,0 +1,23 @@
+{%- # One benefit, used by lib/sections/benefits. Args: layout, index, title, text, href. -%}
+{%- if layout == 'list' -%}
+  <li>
+    <span aria-hidden="true">—</span>
+    {%- if href -%}
+      <a class="benefits-list__link" href="{{ href }}"><span>{{ title }}</span>{% render 'lib/icons/arrow-right', size: 14 %}</a>
+    {%- else -%}
+      <span>{{ title }}</span>
+    {%- endif -%}
+  </li>
+{%- else -%}
+  <li class="benefits__item">
+    <p class="eyebrow">{{ index }}</p>
+    <h3 class="benefits__title">
+      {%- if href -%}
+        <a class="arrow-link" href="{{ href }}"><span>{{ title }}</span>{% render 'lib/icons/arrow-right', size: 20 %}</a>
+      {%- else -%}
+        {{ title }}
+      {%- endif -%}
+    </h3>
+    {%- if text -%}<p class="muted">{{ text }}</p>{%- endif -%}
+  </li>
+{%- endif -%}
