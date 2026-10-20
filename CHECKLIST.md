@@ -52,7 +52,8 @@ off with the merchant and verify it on the preview.
 ## 5. Navigation and pages
 
 - [ ] **Merchant Center:** edit the `principal` menu (header): main
-      categories, products, blog. Keep it to 4–6 links.
+      categories, all products (`/categorias/todas`), blog. Keep it to 4–6
+      links.
 - [ ] **Merchant Center:** edit the `footer` menu (Información column).
 - [ ] **Merchant Center:** complete the three policy pages (shipping, returns,
       privacy) with the store's real terms. Replace every placeholder such as
@@ -94,11 +95,24 @@ off with the merchant and verify it on the preview.
 
 ## 10. Publish
 
-- [ ] The last push printed no `warning:` lines, and every page of the
+- [ ] The last push ended with `checks: … 0 errors, 0 warnings`, and every page of the
       preview reports "No rendering warnings or errors" in its first comment.
 - [ ] The store owner approved the preview.
 - [ ] Merge the branch into `live` with `--no-ff` and push `live`; then delete
       the preview branch. See the Theme Framework Git workflow.
+- [ ] First time only: if the theme's history doesn't come from `live` (it
+      was pushed from its own repository), `live` won't fast-forward to it.
+      Publish it once with a commit on top of `live` that has exactly the
+      branch's files, then branch from `live` as usual:
+
+      ```bash
+      git fetch origin
+      git switch -c publish origin/live
+      git merge --allow-unrelated-histories --no-commit -s ours <branch>
+      git read-tree -u --reset <branch>
+      git commit -m "Publish Minimal"
+      git push origin publish:live
+      ```
 - [ ] **Merchant Center:** Ajustes → Tienda → Dominios: connect the domain.
 - [ ] Visit the live store on a phone: homepage, a product, add to cart,
       checkout, the WhatsApp button and a 404 page.

@@ -1,9 +1,8 @@
 {%- # Five stars filled to the rating, plus the value and count. Args: rating, count, show_count (default true), star_px. -%}
 {%- if rating and count > 0 -%}
   {%- liquid
-    assign value = rating | round: 1
-    assign label = value | append: '' | replace: '.', ','
-    assign percent = value | times: 20 | round: 1
+    assign label = rating | number: 1
+    assign percent = rating | round: 1 | times: 20 | round: 1
   -%}
   <p class="rating" aria-label="Calificación {{ label }} de 5 basada en {{ count }} opiniones">
     <span class="rating__stars" aria-hidden="true">

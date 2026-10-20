@@ -1,4 +1,4 @@
-/*! tiendu-sdk 2.0.0 */
+/*! tiendu-sdk 2.1.0 */
 const getCurrency = (preferredCurrency) => {
 	if (typeof document === 'undefined' && typeof preferredCurrency !== 'string')
 		return 'UYU'
@@ -378,6 +378,11 @@ export const Tiendu = (options = {}) => {
 				if (!fromHistory && history.state?.tienduOverlayId === historyId)
 					history.back()
 				if (!ready) reject(new Error('La ventana se cerró antes de cargar.'))
+				// The overlay may have changed the cart or the shopper: pages
+				// refresh their badges on this event.
+				window.dispatchEvent(
+					new CustomEvent('tiendu:overlay-close', { detail: { overlay } })
+				)
 			}
 			const pop = () => cleanup(true)
 			const receive = (event) => {

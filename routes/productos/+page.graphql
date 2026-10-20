@@ -1,6 +1,0 @@
-query AllProducts($page: Int = 1) {
-  allProducts: products(first: 24, page: $page) {
-    nodes { title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
-    pageInfo { currentPage hasNextPage hasPreviousPage }
-  }
-}

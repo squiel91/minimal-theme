@@ -19,6 +19,6 @@
 {%- else -%}
   <div class="empty-state">
     <p class="title">{{ empty_text | default: 'Todavía no hay productos acá.' }}</p>
-    <a class="arrow-link" href="/productos"><span>Ver todos los productos</span>{% render 'lib/icons/arrow-right' %}</a>
+    <a class="arrow-link" href="/categorias/todas"><span>Ver todos los productos</span>{% render 'lib/icons/arrow-right' %}</a>
   </div>
 {%- endif -%}

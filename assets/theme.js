@@ -25,13 +25,8 @@ async function refreshCart() {
 
 refreshCart()
 
-// Overlays don't report closing: refresh the badge when their frame leaves the page.
-new MutationObserver((records) => {
-	const closed = records.some((record) =>
-		Array.from(record.removedNodes).some((node) => node instanceof Element && node.id === 'left-iframe')
-	)
-	if (closed) refreshCart()
-}).observe(document.body, { childList: true })
+// Checkout and other overlays can change the cart: refresh the badge when one closes.
+window.addEventListener('tiendu:overlay-close', refreshCart)
 
 async function openCheckout() {
 	cartButton?.setAttribute('aria-busy', 'true')

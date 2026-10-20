@@ -5,8 +5,7 @@
       <div class="reviews__summary">
         <p class="eyebrow">Reseñas</p>
         {%- if product.rating -%}
-          {%- assign average = product.rating | round: 1 | append: '' | replace: '.', ',' -%}
-          <p class="display">{{ average }}</p>
+          <p class="display">{{ product.rating | number: 1 }}</p>
         {%- endif -%}
         {%- render 'lib/rating', rating: product.rating, count: product.reviewsCount, show_count: false, star_px: 18 -%}
         <p class="muted small">{{ product.reviewsCount }} {% if product.reviewsCount == 1 %}reseña{% else %}reseñas{% endif %}</p>
@@ -26,6 +25,7 @@
             <p class="review__meta">
               <span class="review__author">{{ review.authorName }}</span>
               {%- if review.verifiedPurchase -%}<span> · Compra verificada</span>{%- endif -%}
+              <span> · {% render 'lib/date', iso: review.createdAt %}</span>
             </p>
           </li>
         {%- endfor -%}

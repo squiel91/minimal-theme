@@ -1475,8 +1475,28 @@ a.chip:hover {
 	height: auto;
 	border-radius: var(--radius-panels);
 }
-.rich-text :where(figure img) {
+/* Image blocks from the blog editor: <figure class="content-image" data-size data-align>. */
+.rich-text .content-image {
+	margin-block: 2em;
+}
+.rich-text .content-image[data-size='small'] {
+	max-width: 20rem;
+}
+.rich-text .content-image[data-size='medium'] {
+	max-width: 32rem;
+}
+.rich-text .content-image[data-size='large'] {
+	max-width: 48rem;
+}
+.rich-text .content-image[data-align='center'] {
 	margin-inline: auto;
+}
+.rich-text .content-image[data-align='right'] {
+	margin-inline-start: auto;
+}
+.rich-text .content-image img {
+	width: 100%;
+	height: auto;
 }
 .rich-text :where(hr) {
 	margin-block: 3em;

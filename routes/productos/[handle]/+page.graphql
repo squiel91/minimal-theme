@@ -19,6 +19,6 @@ query Product($handle: String!) {
     seo { title description }
     rating
     reviewsCount
-    reviews(first: 10) { nodes { rating content authorName verifiedPurchase images { url alt } } }
+    reviews(first: 10) { nodes { rating content authorName verifiedPurchase createdAt images { url alt } } }
   }
 }

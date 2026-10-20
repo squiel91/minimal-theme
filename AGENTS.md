@@ -44,7 +44,7 @@ the layout holds. Make the benefits true for the store. Then follow
 | `routes/**/+page.liquid` + `.graphql` | Pages. `_snippets/` holds partials for one page |
 | `lib/sections/` | Homepage sections, one partial each |
 | `lib/` | Shared partials: product card and grid, price, rating, date, breadcrumbs, nav link |
-| `lib/icons/` | SVG icons. Size with `px:`, never `size:` (reserved by the engine) |
+| `lib/icons/` | SVG icons, sized with the `px:` argument |
 | `queries/` | Named queries for `{% query %}` |
 | `assets/theme.css` | Design tokens in `:root`, then all styles |
 | `assets/theme.js` | Cart badge, overlays, menu, newsletter, sorting, "load more", product page |
@@ -64,6 +64,9 @@ one-line `{%- # … Args: … -%}` comment. Wrap it in
 Pass its copy as arguments from `routes/+page.liquid`. Load any data it needs
 in `routes/+page.graphql` with an alias (`newArrivals: products(...)`), and
 pass it in: partials can't query.
+
+**Link to all products.** Use `/categorias/todas`, the virtual collection
+with every product. There is no `/productos` listing.
 
 **Feature a collection.** Set `featured_handle` at the top of
 `routes/+page.liquid`. Pick one with at least 4 products; empty shows best
@@ -94,7 +97,8 @@ their links disappear if the page doesn't exist.
 ## Verify every change
 
 1. Push to a preview branch, never straight to `live`.
-2. The push prints `warning:` lines for problems; fix them all.
+2. The push ends with `remote: checks: <branch>: 0 errors, N warnings`; fix
+   every warning it lists. No `checks:` line means the checks didn't run.
 3. Open the preview. Each page starts with an HTML comment reporting render
    warnings or errors; it must say "No rendering warnings or errors."
 4. Check the changed pages at desktop width and at 390px wide. Nothing may

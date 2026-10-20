@@ -3,7 +3,7 @@
 {%- assign featured_handle = '' -%}
 
 {%- assign featured_title = 'Más vendidos' -%}
-{%- assign featured_url = '/productos' -%}
+{%- assign featured_url = '/categorias/todas' -%}
 {%- assign featured_products = data.bestSellers.nodes -%}
 {%- if featured_handle != '' -%}
   {%- query 'collection-preview', handle: featured_handle, as: 'preview' -%}
@@ -19,7 +19,7 @@
   title: 'Menos cosas, mejor elegidas.',
   text: 'Piezas simples y duraderas para cada ambiente. Elegidas una por una, pensadas para usarse todos los días.',
   primary_label: 'Ver productos',
-  primary_url: '/productos',
+  primary_url: '/categorias/todas',
   secondary_label: 'Explorar categorías',
   secondary_url: '#categorias'
 -%}
@@ -37,7 +37,7 @@
   title: 'Hechos para durar, no para una temporada.',
   text: 'Trabajamos con talleres chicos y materiales nobles: cerámica, lino y madera maciza. Si no lo usaríamos en nuestra casa, no lo vendemos.',
   link_label: 'Ver la colección',
-  link_url: '/productos',
+  link_url: '/categorias/todas',
   image_url: 'https://imagedelivery.net/HiGIiqXkjW_RLEpaG3HXUg/3dcd0c43-db00-4f51-7c6f-77e2ca56ba00/lg',
   image_alt: 'Jarrón de gres con una rama seca y un cuenco oscuro sobre una mesa de roble'
 -%}

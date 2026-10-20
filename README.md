@@ -26,15 +26,17 @@ git push -u origin my-change   # prints the preview URL
 
 The password is a store API key (Merchant Center → Ajustes → Tienda →
 Desarrollo y API → Claves de API). Keep it in a Git credential helper, never
-in the remote URL. See the Theme Framework docs for publishing and undoing a
-release.
+in the remote URL. Every checked push ends with a `remote: checks:` line;
+without it the checks didn't run. See the Theme Framework docs for publishing
+and undoing a release, and `CHECKLIST.md` for publishing this theme the first
+time.
 
 ## Routes
 
 - `/` home (sections listed in `routes/+page.liquid`)
-- `/productos` all products
 - `/productos/[handle]` product with variant picker and add to cart
-- `/categorias/[handle]` collection with subcategories, sort and "load more"
+- `/categorias/[handle]` collection with subcategories, sort and "load more".
+  All products is the virtual collection `todas`, at `/categorias/todas`.
 - `/busqueda?q=…` search results (the header search opens Tiendu's search overlay)
 - `/blog`, `/blog/[handle]` blog list and post
 - `/paginas/[handle]` static pages (policies)
