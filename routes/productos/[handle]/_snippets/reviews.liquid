@@ -8,7 +8,7 @@
           {%- assign average = product.rating | round: 1 | append: '' | replace: '.', ',' -%}
           <p class="display">{{ average }}</p>
         {%- endif -%}
-        {%- render 'lib/rating', rating: product.rating, count: product.reviewsCount, show_count: false, size: 18 -%}
+        {%- render 'lib/rating', rating: product.rating, count: product.reviewsCount, show_count: false, star_px: 18 -%}
         <p class="muted small">{{ product.reviewsCount }} {% if product.reviewsCount == 1 %}reseña{% else %}reseñas{% endif %}</p>
       </div>
       <ul class="reviews__list">

@@ -1494,6 +1494,21 @@ a.chip:hover {
 	text-align: left;
 }
 
+/* Single-column grids get an explicit column, so wide content (inputs, long words)
+   can't stretch the page past the viewport on phones. */
+.newsletter__inner,
+.split,
+.featured-post,
+.post-grid,
+.benefits,
+.site-footer__grid,
+.product__grid,
+.reviews__grid,
+.post-row,
+.static-page {
+	grid-template-columns: minmax(0, 1fr);
+}
+
 /* Breakpoints ---------------------------------------------------------------------- */
 @media (min-width: 640px) {
 	.site-header__menu-button {

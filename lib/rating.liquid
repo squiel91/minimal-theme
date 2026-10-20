@@ -1,4 +1,4 @@
-{%- # Five stars filled to the rating, plus the value and count. Args: rating, count, show_count (default true), size. -%}
+{%- # Five stars filled to the rating, plus the value and count. Args: rating, count, show_count (default true), star_px. -%}
 {%- if rating and count > 0 -%}
   {%- liquid
     assign value = rating | round: 1
@@ -7,8 +7,8 @@
   -%}
   <p class="rating" aria-label="Calificación {{ label }} de 5 basada en {{ count }} opiniones">
     <span class="rating__stars" aria-hidden="true">
-      <span class="rating__empty">{% for i in (1..5) %}{% render 'lib/icons/star', size: size %}{% endfor %}</span>
-      <span class="rating__fill" style="width: {{ percent }}%">{% for i in (1..5) %}{% render 'lib/icons/star', size: size %}{% endfor %}</span>
+      <span class="rating__empty">{% for i in (1..5) %}{% render 'lib/icons/star', px: star_px %}{% endfor %}</span>
+      <span class="rating__fill" style="width: {{ percent }}%">{% for i in (1..5) %}{% render 'lib/icons/star', px: star_px %}{% endfor %}</span>
     </span>
     {%- unless show_count == false -%}<span aria-hidden="true">{{ label }} ({{ count }})</span>{%- endunless -%}
   </p>
