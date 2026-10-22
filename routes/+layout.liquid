@@ -60,6 +60,11 @@
       {%- endif -%}
       <div class="site-header__actions">
         <a class="icon-button" href="/busqueda" data-open-search aria-label="Buscar">{% render 'lib/icons/search' %}</a>
+        <button class="icon-button" type="button" data-open-account aria-label="Mi cuenta" title="Mi cuenta">{% render 'lib/icons/user' %}</button>
+        <button class="icon-button" type="button" data-open-wishlist aria-label="Favoritos" title="Favoritos">
+          {% render 'lib/icons/heart' %}
+          <span class="wishlist-count" data-wishlist-count hidden aria-hidden="true"></span>
+        </button>
         <button class="icon-button icon-button--cart" type="button" data-open-checkout aria-label="Carrito">
           {% render 'lib/icons/cart' %}
           <span class="icon-button__label">Carrito</span>
@@ -85,6 +90,7 @@
     </dialog>
   {%- endif -%}
 
+  <p class="wrap shopper-status small" role="status" data-shopper-status hidden></p>
   <main id="contenido">{{ content }}</main>
 
   {%- render 'lib/sections/newsletter',

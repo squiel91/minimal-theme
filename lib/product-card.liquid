@@ -1,19 +1,24 @@
 {%- # Product card: 4:5 image, title, rating, price. Args: product (card fields). -%}
-<a class="product-card" href="{{ product.url }}">
-  <div class="product-card__media">
-    {%- if product.coverImage -%}
-      <img src="{{ product.coverImage | image_url: width: 800 }}" alt="{{ product.coverImage.alt | default: product.title | escape }}" loading="lazy">
-    {%- else -%}
-      <img src="{{ 'placeholder.svg' | asset_url }}" alt="{{ product.title | escape }}" loading="lazy">
-    {%- endif -%}
-  </div>
-  <div class="product-card__body">
-    <span class="product-card__title">{{ product.title }}</span>
-    {%- render 'lib/rating', rating: product.rating, count: product.reviewsCount -%}
-    <span>{% render 'lib/price', product: product %}</span>
-    {%- if product.compareAtPriceInCents -%}
-      <s class="product-card__compare">{{ product.compareAtPriceInCents | money_without_trailing_zeros: product.currency }}</s>
-    {%- endif -%}
-  </div>
-  {%- unless product.available -%}<span class="badge">Agotado</span>{%- endunless -%}
-</a>
+<div class="product-card">
+  <a class="product-card__link" href="{{ product.url }}">
+    <div class="product-card__media">
+      {%- if product.coverImage -%}
+        <img src="{{ product.coverImage | image_url: width: 800 }}" alt="{{ product.coverImage.alt | default: product.title | escape }}" loading="lazy">
+      {%- else -%}
+        <img src="{{ 'placeholder.svg' | asset_url }}" alt="{{ product.title | escape }}" loading="lazy">
+      {%- endif -%}
+    </div>
+    <div class="product-card__body">
+      <span class="product-card__title">{{ product.title }}</span>
+      {%- render 'lib/rating', rating: product.rating, count: product.reviewsCount -%}
+      <span>{% render 'lib/price', product: product %}</span>
+      {%- if product.compareAtPriceInCents -%}
+        <s class="product-card__compare">{{ product.compareAtPriceInCents | money_without_trailing_zeros: product.currency }}</s>
+      {%- endif -%}
+    </div>
+    {%- unless product.available -%}<span class="badge">Agotado</span>{%- endunless -%}
+  </a>
+  <button class="icon-button wishlist-button product-card__wishlist" type="button" data-wishlist-product="{{ product.id }}" data-product-title="{{ product.title | escape }}" aria-label="Guardar {{ product.title | escape }} en favoritos" aria-pressed="false">
+    {% render 'lib/icons/heart' %}
+  </button>
+</div>

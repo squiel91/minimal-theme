@@ -8,7 +8,7 @@ anything visual, and follow `CHECKLIST.md` when setting up a new store.
 A Tiendu theme for the Theme Framework (engine 2): folders of Liquid views and
 GraphQL data files, served by Tiendu. There is no build step, no Tailwind and
 no TypeScript: styles are plain CSS in `assets/theme.css` and behavior is plain
-JavaScript in `assets/theme.js`. Cart, checkout, search and account are
+JavaScript in `assets/theme.js`. Cart, checkout, search, account and wishlist are
 Tiendu overlays opened through the Store SDK (`assets/tiendu-sdk.js`).
 
 Tiendu docs: `/llms.txt` on the docs site, then **Tiendu Theme Framework**
@@ -47,7 +47,7 @@ the layout holds. Make the benefits true for the store. Then follow
 | `lib/icons/` | SVG icons, sized with the `px:` argument |
 | `queries/` | Named queries for `{% query %}` |
 | `assets/theme.css` | Design tokens in `:root`, then all styles |
-| `assets/theme.js` | Cart badge, overlays, menu, newsletter, sorting, "load more", product page |
+| `assets/theme.js` | Cart badge, account/favorites state and overlays, menu, newsletter, sorting, "load more", product page |
 | `assets/tiendu-sdk.js` | Store SDK, as released. Don't edit it |
 
 ## Common tasks
@@ -81,6 +81,12 @@ their links disappear if the page doesn't exist.
 
 **Add behavior.** Add a block to `assets/theme.js` that looks for its own
 `data-*` hook and does nothing when the hook is absent.
+
+**Account and favorites.** Header buttons open the account and wishlist overlays.
+`data-wishlist-product` buttons save a product, or open sign-in with that product
+pending. Keep them outside product links. `tiendu:shopper-status` and overlay
+close refresh the header and all hearts; appended cards use the same delegated
+click handler and saved state. Shopper state belongs in the browser, never Liquid.
 
 ## Rules of the framework (the push checks them)
 

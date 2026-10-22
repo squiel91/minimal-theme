@@ -15,7 +15,7 @@ query Product($handle: String!) {
     options { name displayType values { value color image { url alt } } }
     variants { id sku priceInCents compareAtPriceInCents stock available image { url alt } selectedOptions { name value } }
     specifications { name value }
-    related(first: 4) { title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
+    related(first: 4) { id title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
     seo { title description }
     rating
     reviewsCount

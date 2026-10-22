@@ -4,7 +4,7 @@ query CollectionPreview($handle: String!) {
     name
     url
     products(first: 4) {
-      nodes { title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
+      nodes { id title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
     }
   }
 }

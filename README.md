@@ -7,6 +7,10 @@ color. Plain Liquid, GraphQL data files, CSS and JavaScript. No build step.
 It is the Theme Framework version of the `headless-minimal` SvelteKit template
 and looks and behaves the same.
 
+The header opens Tiendu's account and wishlist overlays. Product cards and
+product pages have save buttons; signing in can finish saving the selected
+product, and all hearts follow the shopper's current favorites.
+
 - `CHECKLIST.md`: steps to turn the theme into a real store.
 - `DESIGN.md`: design rules, tokens and image art direction.
 - `AGENTS.md`: guide for AI agents working on the theme.

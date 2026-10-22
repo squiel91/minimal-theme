@@ -86,6 +86,9 @@ off with the merchant and verify it on the preview.
       ask for the test order to be removed afterwards.
 - [ ] Try search, add to cart from a product with options, and the
       newsletter form.
+- [ ] Open account and favorites from the header. Save a product while signed
+      out, finish signing in, then check the heart, count and wishlist. Remove
+      it, sign out, and check that hearts clear, including newly loaded cards.
 
 ## 9. SEO
 

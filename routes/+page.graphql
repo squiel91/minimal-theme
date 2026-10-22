@@ -1,6 +1,6 @@
 query Home {
   bestSellers: products(first: 4, sortBy: "best-selling") {
-    nodes { title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
+    nodes { id title url currency priceMinInCents priceMaxInCents compareAtPriceInCents available coverImage { url alt } rating reviewsCount }
   }
   rootCollections: collections(roots: true) { nodes { name url } }
   latestPosts: blogPosts(first: 4) { nodes { title url excerpt publishedAt coverImage { url alt } } }

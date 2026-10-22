@@ -107,7 +107,10 @@
             </div>
             <button class="btn btn--primary btn--xl btn--full" type="button" data-add-to-cart>Agregar al carrito</button>
           </div>
-          <button class="share" type="button" data-share>{% render 'lib/icons/share' %}<span>Compartir</span></button>
+          <div class="product__secondary-actions">
+            <button class="share wishlist-button" type="button" data-wishlist-product="{{ product.id }}" data-product-title="{{ product.title | escape }}" aria-label="Guardar {{ product.title | escape }} en favoritos" aria-pressed="false">{% render 'lib/icons/heart' %}<span data-wishlist-label>Guardar en favoritos</span></button>
+            <button class="share" type="button" data-share>{% render 'lib/icons/share' %}<span>Compartir</span></button>
+          </div>
           <p class="product__status small" role="status" data-product-status hidden></p>
         </div>
 
