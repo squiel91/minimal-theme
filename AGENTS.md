@@ -111,3 +111,7 @@ their links disappear if the page doesn't exist.
 - Don't add a build step, CSS framework or icon package.
 - Don't put product or content images in `assets/`; they come from the store.
 - Don't place real orders when testing: use an email ending in `.test`.
+
+## SDK initialization
+
+SDK 2.2.0 handles `?cupon=CODE` on the first `Tiendu()` call: it removes the parameter and opens checkout with the code prefilled for the customer to confirm. `couponLinks: { enabled: false }` disables that behavior; `session: { persist: false }` keeps the shopper token in memory without localStorage. Both default to true. Set these options on the first client initialization; later calls reuse that client. Loading the SDK alone does not initialize it.

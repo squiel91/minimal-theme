@@ -1,4 +1,4 @@
-/*! tiendu-sdk 2.1.0 */
+/*! tiendu-sdk 2.2.0 */
 const getCurrency = (preferredCurrency) => {
 	if (typeof document === 'undefined' && typeof preferredCurrency !== 'string')
 		return 'UYU'
@@ -184,6 +184,8 @@ let activeOverlay = null
  * @param {string} [options.origin] Origen de la Storefront API.
  * @param {Object} [options.search] suggestions: lista de búsquedas sugeridas.
  * @param {Object} [options.analytics] pageViews: false desactiva la vista automática (SPA).
+ * @param {Object} [options.couponLinks] enabled: false desactiva la apertura automática de enlaces con cupones.
+ * @param {Object} [options.session] persist: false mantiene la sesión solo en memoria, sin leer ni escribir localStorage.
  * @returns {Object} Cliente compartido por origen y tienda.
  */
 export const Tiendu = (options = {}) => {
@@ -206,16 +208,17 @@ export const Tiendu = (options = {}) => {
 	const trackingEnabled =
 		document.querySelector('meta[name="tiendu:analytics"]')?.content !== 'off'
 	const searchDefaults = { suggestions: options.search?.suggestions ?? [] }
+	const persistSession = options.session?.persist !== false
 	const storageKey = `tiendu:shopper:${key}`
 	let sessionToken = null
 	try {
-		sessionToken = window.localStorage.getItem(storageKey)
+		if (persistSession) sessionToken = window.localStorage.getItem(storageKey)
 	} catch {}
 	const saveToken = (token) => {
 		if (typeof token !== 'string' || !token || token === sessionToken) return
 		sessionToken = token
 		try {
-			window.localStorage.setItem(storageKey, token)
+			if (persistSession) window.localStorage.setItem(storageKey, token)
 		} catch {}
 	}
 	const acceptTokens = (value) => {
@@ -585,6 +588,7 @@ export const Tiendu = (options = {}) => {
 			 * Abre el checkout.
 			 * @method checkout.open
 			 * @param {Object} [options] couponCode opcional para abrir el cupón.
+			 * @param {string} [options.couponCode] Código precargado; el cliente lo confirma en el paso de cupón.
 			 * @returns {Promise<HTMLIFrameElement>} Iframe listo.
 			 */
 			open: ({ couponCode = '' } = {}) => {
@@ -644,6 +648,38 @@ export const Tiendu = (options = {}) => {
 				pageView,
 				new Promise(resolve => setTimeout(resolve, 3000))
 			])
+	}
+	// Consume the link synchronously so theme-level fallbacks cannot open it twice.
+	// Only initialization handles links; importing the module has no client side effects.
+	if (
+		options.couponLinks?.enabled !== false &&
+		typeof window !== 'undefined' &&
+		window.parent === window
+	) {
+		const url = new URL(window.location.href)
+		const rawCoupon = url.searchParams.get('cupon')
+		if (rawCoupon !== null) {
+			const couponCode = rawCoupon
+				.replaceAll(' ', '-')
+				.replace(/[^a-zA-Z0-9-]/g, '')
+				.toUpperCase()
+			url.searchParams.delete('cupon')
+			window.history.replaceState(
+				window.history.state,
+				'',
+				`${url.pathname}${url.search}${url.hash}`
+			)
+			if (couponCode) {
+				const openCouponCheckout = () => {
+					void client.checkout.open({ couponCode }).catch(error => {
+						console.error('No pudimos abrir el cupón.', error)
+					})
+				}
+				if (document.readyState === 'loading')
+					document.addEventListener('DOMContentLoaded', openCouponCheckout, { once: true })
+				else queueMicrotask(openCouponCheckout)
+			}
+		}
 	}
 	return client
 }
