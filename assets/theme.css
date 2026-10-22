@@ -304,8 +304,9 @@ a.chip:hover {
 .site-header__menu-button {
 	flex-shrink: 0;
 	margin-left: -0.25rem;
-	padding: 0.5rem 0.25rem;
-	font-weight: 500;
+}
+.site-header__shopper {
+	display: none;
 }
 .site-header__name {
 	min-width: 0;
@@ -351,7 +352,17 @@ a.chip:hover {
 .mobile-menu::backdrop {
 	background: rgb(10 10 10 / 0.4);
 }
+.mobile-menu[open] {
+	display: flex;
+	flex-direction: column;
+}
+.mobile-menu > nav {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+}
 .mobile-menu__head {
+	flex-shrink: 0;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -374,6 +385,27 @@ a.chip:hover {
 }
 .mobile-menu__link.is-current {
 	color: var(--color-ink);
+}
+.mobile-menu__actions {
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-top: 1.5rem;
+	padding-top: 1rem;
+	padding-bottom: env(safe-area-inset-bottom);
+	border-top: 1px solid var(--color-line);
+}
+.mobile-menu__action {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	min-height: 2.75rem;
+	text-align: left;
+}
+.mobile-menu__count {
+	margin-left: auto;
+	font-size: 0.875rem;
 }
 
 .newsletter {
@@ -1725,6 +1757,9 @@ a.chip:hover {
 	}
 	.site-header__nav {
 		display: flex;
+	}
+	.site-header__shopper {
+		display: inline-flex;
 	}
 	.split {
 		gap: 6rem;

@@ -82,7 +82,10 @@ their links disappear if the page doesn't exist.
 **Add behavior.** Add a block to `assets/theme.js` that looks for its own
 `data-*` hook and does nothing when the hook is absent.
 
-**Account and favorites.** Header buttons open the account and wishlist overlays.
+**Account and favorites.** Desktop header buttons and the mobile menu's bottom
+actions open the account and wishlist overlays. The menu trigger uses an icon,
+and remains available even without a main menu. Close the drawer before opening
+an overlay, and update both copies of the account/favorites controls together.
 `data-wishlist-product` buttons save a product, or open sign-in with that product
 pending. Keep them outside product links. `tiendu:shopper-status` and overlay
 close refresh the header and all hearts; appended cards use the same delegated

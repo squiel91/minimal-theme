@@ -47,9 +47,7 @@
 
   <header class="site-header">
     <div class="wrap site-header__bar">
-      {%- if data.mainMenu -%}
-        <button class="site-header__menu-button" type="button" data-menu-open aria-haspopup="dialog">Menú</button>
-      {%- endif -%}
+      <button class="icon-button site-header__menu-button" type="button" data-menu-open aria-label="Abrir menú" aria-haspopup="dialog" aria-expanded="false" aria-controls="mobile-menu">{% render 'lib/icons/menu' %}</button>
       <a class="site-header__name" href="/">{{ data.store.name }}</a>
       {%- if data.mainMenu -%}
         <nav class="site-header__nav" aria-label="Principal">
@@ -60,8 +58,8 @@
       {%- endif -%}
       <div class="site-header__actions">
         <a class="icon-button" href="/busqueda" data-open-search aria-label="Buscar">{% render 'lib/icons/search' %}</a>
-        <button class="icon-button" type="button" data-open-account aria-label="Mi cuenta" title="Mi cuenta">{% render 'lib/icons/user' %}</button>
-        <button class="icon-button" type="button" data-open-wishlist aria-label="Favoritos" title="Favoritos">
+        <button class="icon-button site-header__shopper" type="button" data-open-account aria-label="Mi cuenta" title="Mi cuenta">{% render 'lib/icons/user' %}</button>
+        <button class="icon-button site-header__shopper" type="button" data-open-wishlist aria-label="Favoritos" title="Favoritos">
           {% render 'lib/icons/heart' %}
           <span class="wishlist-count" data-wishlist-count hidden aria-hidden="true"></span>
         </button>
@@ -74,21 +72,28 @@
     </div>
   </header>
 
-  {%- if data.mainMenu -%}
-    <dialog class="mobile-menu" data-menu aria-label="Menú">
-      <div class="mobile-menu__head">
-        <span class="eyebrow">Menú</span>
-        <button class="mobile-menu__close" type="button" data-menu-close>Cerrar</button>
-      </div>
-      <nav aria-label="Principal">
-        <ul class="mobile-menu__list">
-          {%- for item in data.mainMenu.items -%}
-            <li>{%- render 'lib/nav-link', item: item, class: 'mobile-menu__link' -%}</li>
-          {%- endfor -%}
-        </ul>
-      </nav>
-    </dialog>
-  {%- endif -%}
+  <dialog class="mobile-menu" id="mobile-menu" data-menu aria-label="Menú">
+    <div class="mobile-menu__head">
+      <span class="eyebrow">Menú</span>
+      <button class="mobile-menu__close" type="button" data-menu-close>Cerrar</button>
+    </div>
+    <nav aria-label="Principal">
+      <ul class="mobile-menu__list">
+        {%- for item in data.mainMenu.items -%}
+          <li>{%- render 'lib/nav-link', item: item, class: 'mobile-menu__link' -%}</li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+    <div class="mobile-menu__actions">
+      <button class="mobile-menu__action" type="button" data-open-account aria-label="Mi cuenta">
+        {% render 'lib/icons/user' %}<span>Mi cuenta</span>
+      </button>
+      <button class="mobile-menu__action" type="button" data-open-wishlist aria-label="Favoritos">
+        {% render 'lib/icons/heart' %}<span>Favoritos</span>
+        <span class="mobile-menu__count" data-wishlist-count hidden aria-hidden="true"></span>
+      </button>
+    </div>
+  </dialog>
 
   <p class="wrap shopper-status small" role="status" data-shopper-status hidden></p>
   <main id="contenido">{{ content }}</main>

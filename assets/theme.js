@@ -67,12 +67,13 @@ function showShopperStatus(message) {
 
 function renderWishlist() {
 	const count = wishlistProductIds.length
-	document.querySelector('[data-open-wishlist]')?.setAttribute('aria-label', count ? `Favoritos, ${count} productos` : 'Favoritos')
-	const badge = document.querySelector('[data-wishlist-count]')
-	if (badge) {
+	document.querySelectorAll('[data-open-wishlist]').forEach((button) => {
+		button.setAttribute('aria-label', count ? `Favoritos, ${count} productos` : 'Favoritos')
+	})
+	document.querySelectorAll('[data-wishlist-count]').forEach((badge) => {
 		badge.textContent = count
 		badge.hidden = !count
-	}
+	})
 	document.querySelectorAll('[data-wishlist-product]').forEach((button) => {
 		const id = Number(button.dataset.wishlistProduct)
 		const saved = wishlistProductIds.includes(id)
@@ -91,10 +92,11 @@ async function refreshShopper() {
 		const status = await tiendu().shopper.getStatus()
 		if (request !== shopperRequest) return
 		wishlistProductIds = status.wishlistProductIds
-		const account = document.querySelector('[data-open-account]')
 		const accountLabel = status.shopper?.name ? `Mi cuenta, ${status.shopper.name}` : 'Mi cuenta'
-		account?.setAttribute('aria-label', accountLabel)
-		account?.setAttribute('title', accountLabel)
+		document.querySelectorAll('[data-open-account]').forEach((account) => {
+			account.setAttribute('aria-label', accountLabel)
+			account.setAttribute('title', accountLabel)
+		})
 		renderWishlist()
 	} catch {
 		// Keep browsing available when the status cannot be loaded; actions can retry.
@@ -108,6 +110,7 @@ window.addEventListener('tiendu:overlay-close', refreshShopper)
 document.addEventListener('click', async (event) => {
 	const button = event.target.closest('[data-open-account], [data-open-wishlist], [data-wishlist-product]')
 	if (!button || button.disabled) return
+	button.closest('[data-menu]')?.close()
 	const productId = Number(button.dataset.wishlistProduct)
 	button.disabled = true
 	button.setAttribute('aria-busy', 'true')
@@ -144,7 +147,12 @@ document.addEventListener('click', async (event) => {
 
 const menu = document.querySelector('[data-menu]')
 if (menu) {
-	document.querySelector('[data-menu-open]')?.addEventListener('click', () => menu.showModal())
+	const trigger = document.querySelector('[data-menu-open]')
+	trigger?.addEventListener('click', () => {
+		menu.showModal()
+		trigger.setAttribute('aria-expanded', 'true')
+	})
+	menu.addEventListener('close', () => trigger?.setAttribute('aria-expanded', 'false'))
 	menu.querySelector('[data-menu-close]')?.addEventListener('click', () => menu.close())
 	// A click on the backdrop lands on the dialog itself.
 	menu.addEventListener('click', (event) => {
