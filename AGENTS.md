@@ -86,6 +86,10 @@ their links disappear if the page doesn't exist.
 actions open the account and wishlist overlays. The menu trigger uses an icon,
 and remains available even without a main menu. Close the drawer before opening
 an overlay, and update both copies of the account/favorites controls together.
+The two-bar menu icon is vertically centered. The native dialog slides over
+240ms while its backdrop fades, including on close; reduced motion skips both.
+Use `closeMobileMenu()` for animated closure and wait for it before opening an
+overlay. Escape and backdrop clicks follow the same path.
 `data-wishlist-product` buttons save a product, or open sign-in with that product
 pending. Keep them outside product links. `tiendu:shopper-status` and overlay
 close refresh the header and all hearts; appended cards use the same delegated

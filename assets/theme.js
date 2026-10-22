@@ -110,7 +110,6 @@ window.addEventListener('tiendu:overlay-close', refreshShopper)
 document.addEventListener('click', async (event) => {
 	const button = event.target.closest('[data-open-account], [data-open-wishlist], [data-wishlist-product]')
 	if (!button || button.disabled) return
-	button.closest('[data-menu]')?.close()
 	const productId = Number(button.dataset.wishlistProduct)
 	button.disabled = true
 	button.setAttribute('aria-busy', 'true')
@@ -120,6 +119,7 @@ document.addEventListener('click', async (event) => {
 		renderWishlist()
 	}
 	try {
+		if (button.closest('[data-menu]')) await closeMobileMenu()
 		if (button.hasAttribute('data-open-account')) await tiendu().shopper.open()
 		else if (button.hasAttribute('data-open-wishlist')) await tiendu().wishlist.open()
 		else {
@@ -146,17 +146,37 @@ document.addEventListener('click', async (event) => {
 // Mobile menu
 
 const menu = document.querySelector('[data-menu]')
+let menuClosing = null
+
+function closeMobileMenu() {
+	if (menuClosing) return menuClosing
+	if (!menu?.open) return Promise.resolve()
+	menu.close()
+	// Native dialog display/overlay transitions keep the panel and backdrop
+	// visible until their exit finishes. Wait before opening another overlay.
+	menuClosing = Promise.allSettled(menu.getAnimations().map((animation) => animation.finished))
+		.finally(() => { menuClosing = null })
+	return menuClosing
+}
+
 if (menu) {
 	const trigger = document.querySelector('[data-menu-open]')
-	trigger?.addEventListener('click', () => {
+	trigger?.addEventListener('click', async () => {
+		await menuClosing
 		menu.showModal()
 		trigger.setAttribute('aria-expanded', 'true')
 	})
 	menu.addEventListener('close', () => trigger?.setAttribute('aria-expanded', 'false'))
-	menu.querySelector('[data-menu-close]')?.addEventListener('click', () => menu.close())
+	menu.querySelector('[data-menu-close]')?.addEventListener('click', closeMobileMenu)
+	menu.addEventListener('cancel', (event) => {
+		event.preventDefault()
+		void closeMobileMenu()
+	})
 	// A click on the backdrop lands on the dialog itself.
 	menu.addEventListener('click', (event) => {
-		if (event.target === menu) menu.close()
+		if (event.target !== menu) return
+		const bounds = menu.getBoundingClientRect()
+		if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) void closeMobileMenu()
 	})
 }
 
