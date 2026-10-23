@@ -28,6 +28,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% assign js_modules = 'client,cart,shopper,menu,forms,catalog,product,gallery' | split: ',' %}
+  <script type="importmap">
+    {"imports": {
+      "@tiendu/sdk": "{{ 'tiendu-sdk.js' | asset_url }}",
+      {% for module in js_modules %}{% assign module_asset = 'js/' | append: module | append: '.js' %}
+      "@minimal/{{ module }}": "{{ module_asset | asset_url }}"{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    }}
+  </script>
+  <link rel="modulepreload" href="{{ 'tiendu-sdk.js' | asset_url }}">
+  {% for module in js_modules %}{% assign module_asset = 'js/' | append: module | append: '.js' %}<link rel="modulepreload" href="{{ module_asset | asset_url }}">{% endfor %}
   {{ tiendu_head }}
   {%- if p.font -%}
     <style>
@@ -39,6 +50,8 @@
     </style>
   {%- endif -%}
   {{ 'theme.css' | asset_url | stylesheet_tag }}
+  {% assign css_modules = 'controls,layout,home,catalog,product,content,pages,blog' | split: ',' %}
+  {% for module in css_modules %}{% assign stylesheet = 'css/' | append: module | append: '.css' %}{{ stylesheet | asset_url | stylesheet_tag }}{% endfor %}
   {{ 'tiendu-sdk.js' | asset_url | script_tag }}
   {{ 'theme.js' | asset_url | script_tag }}
 </head>

@@ -1,0 +1,25 @@
+/* Minimal: pages styles, including responsive rules and component states. */
+.static-page {
+	display: grid;
+	gap: 2rem;
+	margin-top: 3rem;
+}
+.static-page {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 768px) {
+	.static-page {
+		grid-template-columns: 5fr 7fr;
+		gap: 4rem;
+		margin-top: 5rem;
+	}
+	.static-page__title {
+		position: sticky;
+		top: 8rem;
+		align-self: start;
+	}
+	.static-page__body {
+		padding-top: 0.75rem;
+	}
+}

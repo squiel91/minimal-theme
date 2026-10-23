@@ -24,7 +24,10 @@ itself when the copy, products and brand color change.
 ## Tokens
 
 Defined in `:root` at the top of `assets/theme.css`. Change them there, not in
-components.
+components. The base stylesheet also holds resets and typography. Feature styles
+are split into `assets/css/` (controls, layout, home, catalog, product, content,
+pages and blog), with responsive rules alongside their components. The root
+layout links them in order through `asset_url`; see README.md for the file map.
 
 ### Type
 

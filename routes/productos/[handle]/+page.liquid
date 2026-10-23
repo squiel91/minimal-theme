@@ -148,7 +148,7 @@
   <form method="dialog"><button class="btn btn--primary btn--lg">Entendido</button></form>
 </dialog>
 
-{%- # Variant data for assets/theme.js (selection, price, stock, gallery, cart). -%}
+{%- # Variant data for assets/js/product.js (selection, price, stock, gallery, cart). -%}
 {%- capture product_json -%}
 {"id":{{ product.id | json }},"title":{{ product.title | json }},"currency":{{ product.currency | json }},"priceMinInCents":{{ product.priceMinInCents | json }},"optionNames":{{ product.options | map: 'name' | json }},"variants":{{ product.variants | json }}}
 {%- endcapture -%}

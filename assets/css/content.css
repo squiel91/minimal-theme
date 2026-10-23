@@ -1,0 +1,98 @@
+/* Minimal: content styles, including responsive rules and component states. */
+.rich-text {
+	max-width: 68ch;
+	font-size: 1.125rem;
+	line-height: 1.75;
+}
+.rich-text :where(p, li, blockquote) {
+	white-space: pre-line;
+}
+.rich-text :where(p, ul, ol, blockquote, figure, table, pre) {
+	margin-block: 1.25em;
+}
+.rich-text :where(h2) {
+	margin: 2.5em 0 0.75em;
+	font-size: var(--text-title);
+	font-weight: 500;
+	line-height: 1.05;
+	letter-spacing: -0.025em;
+}
+.rich-text :where(h1, h3, h4) {
+	margin: 2em 0 0.5em;
+	font-size: 1.375rem;
+	font-weight: 500;
+	line-height: 1.3;
+	letter-spacing: -0.015em;
+}
+.rich-text > :first-child {
+	margin-top: 0;
+}
+.rich-text :where(a) {
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+}
+.rich-text :where(strong, b) {
+	font-weight: 600;
+}
+.rich-text :where(ul) {
+	padding-left: 1.25em;
+	list-style: disc;
+}
+.rich-text :where(ol) {
+	padding-left: 1.25em;
+	list-style: decimal;
+}
+.rich-text :where(li) {
+	margin-block: 0.4em;
+	padding-left: 0.25em;
+}
+.rich-text :where(li)::marker {
+	color: var(--color-muted);
+}
+.rich-text :where(blockquote) {
+	padding-left: 1.25em;
+	border-left: 2px solid var(--color-ink);
+	font-size: 1.25rem;
+}
+.rich-text :where(img, video) {
+	height: auto;
+	border-radius: var(--radius-panels);
+}
+.rich-text .content-image {
+	margin-block: 2em;
+}
+.rich-text .content-image[data-size='small'] {
+	max-width: 20rem;
+}
+.rich-text .content-image[data-size='medium'] {
+	max-width: 32rem;
+}
+.rich-text .content-image[data-size='large'] {
+	max-width: 48rem;
+}
+.rich-text .content-image[data-align='center'] {
+	margin-inline: auto;
+}
+.rich-text .content-image[data-align='right'] {
+	margin-inline-start: auto;
+}
+.rich-text .content-image img {
+	width: 100%;
+	height: auto;
+}
+.rich-text :where(hr) {
+	margin-block: 3em;
+	border: 0;
+	border-top: 1px solid var(--color-line);
+}
+.rich-text :where(table) {
+	width: 100%;
+	font-size: 0.9375rem;
+	border-collapse: collapse;
+}
+.rich-text :where(th, td) {
+	padding: 0.6em 0.75em 0.6em 0;
+	border-bottom: 1px solid var(--color-line);
+	text-align: left;
+}
