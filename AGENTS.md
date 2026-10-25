@@ -147,4 +147,4 @@ click handler and saved state. Shopper state belongs in the browser, never Liqui
 
 ## SDK initialization
 
-SDK 2.2.0 handles `?cupon=CODE` on the first `Tiendu()` call: it removes the parameter and opens checkout with the code prefilled for the customer to confirm. `couponLinks: { enabled: false }` disables that behavior; `session: { persist: false }` keeps the shopper token in memory without localStorage. Both default to true. Set these options in `assets/js/client.js`, on its `Tiendu()` initialization; all other modules import that client. Loading the SDK alone does not initialize it.
+SDK 2.3.0 (since 2.2.0) handles `?cupon=CODE` on the first `Tiendu()` call: it removes the parameter and opens checkout with the code prefilled for the customer to confirm. `couponLinks: { enabled: false }` disables that behavior; `session: { persist: false }` keeps the shopper token in memory without localStorage. Both default to true. Set these options in `assets/js/client.js`, on its `Tiendu()` initialization; all other modules import that client. Loading the SDK alone does not initialize it.
